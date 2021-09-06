@@ -16,7 +16,6 @@ def home(request):
 def list_items(request):
     title = 'List Items'
     items = Stock.objects.all()
-
     # SEARCH FUNCTIONALITY
     form = StockSearchForm()
     if request.method == 'POST':
@@ -62,3 +61,17 @@ def update_items(request, pk):
         'title': title,
     }
     return render(request, 'update_item.html', context)
+
+
+def delete_items(request, pk):
+    title = 'Delete item'
+    item = Stock.objects.get(id=pk)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('list_items')
+    context = {
+        'title': title,
+        'item': item,
+    }
+
+    return render(request, 'delete_items.html', context)

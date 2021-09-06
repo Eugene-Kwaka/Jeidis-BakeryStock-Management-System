@@ -4,7 +4,13 @@ from django.db import models
 
 
 class Stock(models.Model):
-    category = models.CharField(max_length=50, null=True)
+    category_choice = (
+        ('Cutlery', 'Cutlery'),
+        ('Equipment', 'Equipment'),
+        ('Essentials', 'Essentials')
+    )
+    category = models.CharField(
+        max_length=50, null=True, choices=category_choice)
     item_name = models.CharField(max_length=50, null=True)
     quantity = models.IntegerField(default='0', null=True)
     receive_quantity = models.IntegerField(
