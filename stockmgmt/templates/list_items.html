@@ -7,12 +7,20 @@
 
 <body>
     <main class="container">
+        {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="bg-light p-5 rounded">
             <div class="header">{{title}}</div>
 
-            <form method='POST' action=''>
+            <form method='GET' action=''>
                 {% csrf_token %}
-                {{form|crispy}}
+                {{my_filter.form |crispy}}
                 <br>
                 <input type="submit" value='Search' />
             </form>
@@ -26,6 +34,8 @@
                             <th>CATEGORY</th>
                             <th>ITEM NAME</th>
                             <th>QUANTITY IN STORE</th>
+                            <th>TIMESTAMP</th>
+                            <th>LAST_UPDATED</th>
                             <th>DELETE ITEM</th>
                         </tr>
                     </thead>
@@ -35,6 +45,8 @@
                         <td>{{item.category}}</td>
                         <td><a href="{% url 'update_items' item.id %}">{{item.item_name}}</a></td>
                         <td>{{item.quantity}}</td>
+                        <td>{{item.timestamp}}</td>
+                        <td>{{item.last_updated}}</td>
                         <td><a href="{% url 'delete_items' item.id %}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
                                     class="bi bi-archive" viewBox="0 0 16 16">
@@ -52,9 +64,9 @@
 
 
         </div>
-
+        <br>
         <div>
-            <p><a href="{% url 'add_items' %}">Add items</a></p>
+            <p><a href="{% url 'add_items' %}" class="btn btn-secondary">Add items</a></p>
         </div>
     </main>
 
