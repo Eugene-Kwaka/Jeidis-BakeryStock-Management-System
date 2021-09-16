@@ -7,4 +7,8 @@ urlpatterns = [
     path('add_items/', add_items,  name="add_items"),
     path('update_items/<str:pk>/', update_items, name="update_items"),
     path('delete_items/<str:pk>/', delete_items, name="delete_items"),
+    path('item_details/<str:pk>/', item_details, name="item_details"),
+    path('issue_item/<str:pk>/', issue_item, name="issue_item"),
+    path('receive_item/<str:pk>/', receive_item, name="receive_item")
+
 ]

@@ -8,22 +8,14 @@
 <body>
 
     <main class="container">
-        {% if messages %}
-        <div class="alert alert-danger" role="alert">
-            {% for message in messages %}
-            {{ message }}
-            {% endfor %}
-        </div>
-        {% endif %}
         <div class="bg-light p-5 rounded">
-            <h1>{{ title }}</h1>
+            <h1>{{ title }} <strong>{{item.item_name}}</strong></h1>
             <br>
             <form method='POST' action=''>
-                {% csrf_token %
+                {% csrf_token %}
                 {{ form | crispy }}
-
                 <br>
-                <input type="submit" value='Save' />
+                <input type="submit" value='Update' />
             </form>
         </div>
     </main>

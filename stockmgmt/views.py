@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
@@ -99,3 +100,56 @@ def delete_items(request, pk):
     }
 
     return render(request, 'delete_items.html', context)
+
+
+def item_details(request, pk):
+    item = Stock.objects.get(id=pk)
+    context = {
+        'item': item,
+    }
+
+    return render(request, 'item_details.html', context)
+
+
+def issue_item(request, pk):
+    title = 'Issue'
+    item = Stock.objects.get(id=pk)
+    form = IssueForm(request.POST or None, instance=item)
+    if form.is_valid():
+        #instance = form.save(commit=False)
+        item.quantity -= item.issue_quantity
+        form.save()
+        messages.success(request, 'Issued successfully: ' + " " + str(item.quantity) +
+                         " " + str(item.item_name) + " " + 'now left in store')
+        return redirect(reverse('item_details', kwargs={
+            'pk': item.pk,
+        }))
+
+    context = {
+        'title': title,
+        'item': item,
+        'form': form,
+    }
+    return render(request, 'issue_item.html', context)
+
+
+def receive_item(request, pk):
+    title = 'Receive'
+    item = Stock.objects.get(id=pk)
+    form = ReceiveForm(request.POST or None, instance=item)
+    if form.is_valid():
+        #instance = form.save(commit=False)
+        item.quantity += item.receive_quantity
+        form.save()
+        messages.success(request, 'Received successfully: ' + " " + str(item.quantity) +
+                         " " + str(item.item_name) + " " + 'now left in store')
+        return redirect(reverse('item_details', kwargs={
+            'pk': item.pk,
+        }))
+
+    context = {
+        'title': title,
+        'item': item,
+        'form': form,
+    }
+    return render(request, 'receive_item.html', context)
