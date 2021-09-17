@@ -54,15 +54,17 @@ def add_items(request):
     title = 'Add Items'
     form = StockCreationForm(request.POST or None)
     if request.method == 'POST':
+        form = StockCreationForm(request.POST or None)
         if form.is_valid():
-            item_name = form.cleaned_data.get('item_name')
-            if form['item_name'].value() == item_name:
-                messages.warning(request, 'Item already exists')
-                return redirect('add_items')
-            else:
-                form.save()
-                messages.success(request, 'Item added successfully')
-                return redirect('list_items')
+            #item_name = form.cleaned_data.get('item_name')
+            #item_name = Stock.objects.filter(item_name__iexact='item_name')
+            # if form['item_name'].value() == item_name:
+            #     messages.warning(request, 'Item already exists')
+            #     return redirect('add_items')
+            # else:
+            form.save()
+            messages.success(request, 'Item added successfully')
+            return redirect('list_items')
     context = {
         'form': form,
         'title': title
@@ -153,3 +155,22 @@ def receive_item(request, pk):
         'form': form,
     }
     return render(request, 'receive_item.html', context)
+
+
+def reorder_level(request, pk):
+    title = 'Reorder levels for'
+    item = Stock.objects.get(id=pk)
+    form = ReorderLevelForm()
+    if request.method == 'POST':
+        form = ReorderLevelForm(request.POST or None, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Reorder level for' + " " + str(item.item_name) +
+                             " " + " has been updated to" + " " + str(item.reorder_level))
+            return redirect('list_items')
+    context = {
+        'title': title,
+        'item': item,
+        'form': form,
+    }
+    return render(request, 'reorder_level.html', context)

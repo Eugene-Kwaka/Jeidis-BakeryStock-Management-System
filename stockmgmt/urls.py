@@ -9,6 +9,7 @@ urlpatterns = [
     path('delete_items/<str:pk>/', delete_items, name="delete_items"),
     path('item_details/<str:pk>/', item_details, name="item_details"),
     path('issue_item/<str:pk>/', issue_item, name="issue_item"),
-    path('receive_item/<str:pk>/', receive_item, name="receive_item")
+    path('receive_item/<str:pk>/', receive_item, name="receive_item"),
+    path('reorder_level/<str:pk>/', reorder_level, name="reorder_level"),
 
 ]
