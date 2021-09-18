@@ -18,9 +18,9 @@
         <div class="bg-light p-5 rounded">
             <div class="header">{{title}}</div>
 
-            <form method='GET' action=''>
+            <form method='POST' action=''>
                 {% csrf_token %}
-                {{my_filter.form |crispy}}
+                {{form |crispy}}
                 <br>
                 <input type="submit" value='Search' />
             </form>

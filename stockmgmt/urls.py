@@ -18,6 +18,7 @@ urlpatterns = [
     path('issue_item/<str:pk>/', issue_item, name="issue_item"),
     path('receive_item/<str:pk>/', receive_item, name="receive_item"),
     path('reorder_level/<str:pk>/', reorder_level, name="reorder_level"),
+    path('stock_history/', list_history, name="list_history"),
 
     # PASSWORD RESET URL PATHS
     path('reset_password/', auth_views.PasswordResetView.as_view(

@@ -56,12 +56,12 @@ class ReorderLevelForm(forms.ModelForm):
     #     return category
 
 
-# class StockSearchForm(forms.ModelForm):
-#     # This helps us choose which search field to fill without necessarily filling all required fields
-#     category = forms.CharField(required=False)
-#     item_name = forms.CharField(required=False)
-#     export_to_CSV = forms.BooleanField(required=False)
+class StockSearchForm(forms.ModelForm):
+    # This helps us choose which search field to fill without necessarily filling all required fields
+    #category = forms.CharField(required=False)
+    item_name = forms.CharField(required=False)
+    export_to_CSV = forms.BooleanField(required=False)
 
-#     class Meta:
-#         model = Stock
-#         fields = ['category', 'item_name']
+    class Meta:
+        model = Stock
+        fields = ['category', 'item_name']

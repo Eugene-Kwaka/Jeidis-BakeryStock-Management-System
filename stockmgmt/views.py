@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
-from .models import Stock
+from .models import *
 from .forms import *
 from .filters import StockFilter
 
@@ -66,31 +66,91 @@ def home(request):
 def list_items(request):
     title = 'List Items'
     items = Stock.objects.all()
-    my_filter = StockFilter()
+
+    # SEARCH FUNCTIONALITY USING FILTERS.PY
+    #my_filter = StockFilter()
+    #my_filter = StockFilter(request.GET, queryset=items)
+    #items = my_filter.qs
 
     # SEARCH FUNCTIONALITY
-    my_filter = StockFilter(request.GET, queryset=items)
-    items = my_filter.qs
+    form = StockSearchForm(request.POST or None)
+    if request.method == 'POST':
+        category = form['category'].value()
+        items = Stock.objects.filter(
+            item_name__icontains=form['item_name'].value()
+        )
+        # If category is not empty
+        if (category != ''):
+            items = items.filter(category_id=category)
 
     # EXPORT TO CSV
-    if my_filter.form['export_to_CSV'].value() == True:
+    if form['export_to_CSV'].value() == True:
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="List of stock items.csv"'
         writer = csv.writer(response)
         writer.writerow(['CATEGORY', 'ITEM NAME', 'QUANTITY'])
-        instance = items
         # for each item in the stock list in the CSV this loop will run and write the item details
-        for stock in instance:
+        for stock in items:
             writer.writerow([stock.category, stock.item_name, stock.quantity])
-            return response
+        return response
 
     context = {
         'items': items,
         'title': title,
-        'my_filter': my_filter,
+        'form': form,
     }
 
     return render(request, 'list_items.html', context)
+
+
+@login_required
+def list_history(request):
+    title = 'ITEMS HISTORY'
+    items = StockHistory.objects.all()
+
+    # ITEM HISTORY SEARCH FORM
+    form = StockSearchForm(request.POST or None)
+    if request.method == 'POST':
+        category = form['category'].value()
+        items = StockHistory.objects.filter(
+            item_name__icontains=form['item_name'].value()
+        )
+        # If category is not empty and one of the categories has been selected
+        if (category != ''):
+            items = items.filter(category_id=category)
+
+        # EXPORT TO CSV
+        if form['export_to_CSV'].value() == True:
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="Stock History.csv"'
+            writer = csv.writer(response)
+            writer.writerow(
+                ['CATEGORY',
+                 'ITEM NAME',
+                 'QUANTITY',
+                 'ISSUE QUANTITY',
+                 'RECEIVE QUANTITY',
+                 'RECEIVE BY',
+                 'ISSUE BY',
+                 'LAST UPDATED'])
+            for stock in items:
+                writer.writerow(
+                    [stock.category,
+                     stock.item_name,
+                     stock.quantity,
+                     stock.issue_quantity,
+                     stock.receive_quantity,
+                     stock.receive_by,
+                     stock.issue_by,
+                     stock.last_updated])
+            return response
+
+    context = {
+        'title': title,
+        'items': items,
+        'form': form
+    }
+    return render(request, 'list_history.html', context)
 
 
 @login_required
@@ -161,6 +221,17 @@ def issue_item(request, pk):
     if form.is_valid():
         item.quantity -= item.issue_quantity
         form.save()
+        issue_history = StockHistory(
+            id=item.id,
+            last_updated=item.last_updated,
+            category_id=item.category_id,
+            item_name=item.item_name,
+            quantity=item.quantity,
+            issue_to=item.issue_to,
+            issue_by=item.issue_by,
+            issue_quantity=item.issue_quantity,
+        )
+        issue_history.save()
         messages.success(request, 'Issued successfully: ' + " " + str(item.quantity) +
                          " " + str(item.item_name) + " " + 'now left in store')
         return redirect(reverse('item_details', kwargs={
@@ -184,6 +255,16 @@ def receive_item(request, pk):
         #instance = form.save(commit=False)
         item.quantity += item.receive_quantity
         form.save()
+        receive_history = StockHistory(
+            id=item.id,
+            last_updated=item.last_updated,
+            category_id=item.category_id,
+            item_name=item.item_name,
+            quantity=item.quantity,
+            receive_quantity=item.receive_quantity,
+            receive_by=item.receive_by
+        )
+        receive_history.save()
         messages.success(request, 'Received successfully: ' + " " + str(item.quantity) +
                          " " + str(item.item_name) + " " + 'now left in store')
         return redirect(reverse('item_details', kwargs={
