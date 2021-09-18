@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 from .models import Stock
@@ -10,6 +12,46 @@ from .forms import *
 from .filters import StockFilter
 
 # Create your views here.
+
+
+def registerPage(request):
+    title = "Sign Up"
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, "Account was created for " + username)
+            return redirect('loginPage')
+
+    context = {
+        'title': title,
+        'form': form,
+    }
+    return render(request, 'register.html', context)
+
+
+def loginPage(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, "Username OR Password is incorrect!")
+
+    context = {}
+    return render(request, 'login.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('loginPage')
 
 
 def home(request):
@@ -20,6 +62,7 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+@login_required
 def list_items(request):
     title = 'List Items'
     items = Stock.objects.all()
@@ -50,18 +93,13 @@ def list_items(request):
     return render(request, 'list_items.html', context)
 
 
+@login_required
 def add_items(request):
     title = 'Add Items'
     form = StockCreationForm(request.POST or None)
     if request.method == 'POST':
         form = StockCreationForm(request.POST or None)
         if form.is_valid():
-            #item_name = form.cleaned_data.get('item_name')
-            #item_name = Stock.objects.filter(item_name__iexact='item_name')
-            # if form['item_name'].value() == item_name:
-            #     messages.warning(request, 'Item already exists')
-            #     return redirect('add_items')
-            # else:
             form.save()
             messages.success(request, 'Item added successfully')
             return redirect('list_items')
@@ -72,6 +110,7 @@ def add_items(request):
     return render(request, 'add_items.html', context)
 
 
+@login_required
 def update_items(request, pk):
     title = 'Update item details'
     item = Stock.objects.get(id=pk)
@@ -89,6 +128,7 @@ def update_items(request, pk):
     return render(request, 'update_item.html', context)
 
 
+@login_required
 def delete_items(request, pk):
     title = 'Delete item'
     item = Stock.objects.get(id=pk)
@@ -113,12 +153,12 @@ def item_details(request, pk):
     return render(request, 'item_details.html', context)
 
 
+@login_required
 def issue_item(request, pk):
     title = 'Issue'
     item = Stock.objects.get(id=pk)
     form = IssueForm(request.POST or None, instance=item)
     if form.is_valid():
-        #instance = form.save(commit=False)
         item.quantity -= item.issue_quantity
         form.save()
         messages.success(request, 'Issued successfully: ' + " " + str(item.quantity) +
@@ -135,6 +175,7 @@ def issue_item(request, pk):
     return render(request, 'issue_item.html', context)
 
 
+@login_required
 def receive_item(request, pk):
     title = 'Receive'
     item = Stock.objects.get(id=pk)
@@ -157,6 +198,7 @@ def receive_item(request, pk):
     return render(request, 'receive_item.html', context)
 
 
+@login_required
 def reorder_level(request, pk):
     title = 'Reorder levels for'
     item = Stock.objects.get(id=pk)
