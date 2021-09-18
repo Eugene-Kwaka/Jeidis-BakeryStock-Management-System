@@ -61,7 +61,9 @@ class StockSearchForm(forms.ModelForm):
     #category = forms.CharField(required=False)
     item_name = forms.CharField(required=False)
     export_to_CSV = forms.BooleanField(required=False)
+    start_date = forms.DateTimeField(required=False)
+    end_date = forms.DateTimeField(required=False)
 
     class Meta:
         model = Stock
-        fields = ['category', 'item_name']
+        fields = ['category', 'item_name', 'start_date', 'end_date']

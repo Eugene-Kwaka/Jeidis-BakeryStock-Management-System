@@ -16,68 +16,96 @@
         {% endif %}
 
         <div class="bg-light p-5 rounded">
-            <div class="header">{{title}}</div>
 
-            <form method='POST' action=''>
-                {% csrf_token %}
-                {{form |crispy}}
-                <br>
-                <input type="submit" value='Search' />
-            </form>
-            <br>
-            <br>
-            <div class="display_table">
-                <table class='table'>
-                    <thead>
-                        <tr>
-                            <th>COUNT</th>
-                            <th>CATEGORY</th>
-                            <th>ITEM NAME</th>
-                            <th>QUANTITY IN STORE</th>
-                            <th>REORDER LEVEL</th>
-                            <th>TIMESTAMP</th>
-                            <th>LAST_UPDATED</th>
-                            <th>DELETE ITEM</th>
-                        </tr>
-                    </thead>
-                    {% for item in items %}
-                    <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td>{{item.category}}</td>
-                        <td><a href="{% url 'update_items' item.id %}">{{item.item_name}}</a></td>
-                        <td>
-                            {% if item.quantity <= item.reorder_level %} <a href="{% url 'item_details' item.id %}">
-                                <div style="background-color: orange;">{{item.quantity}}</div></a>
-                                {% else %}
-                                <a href="{% url 'item_details' item.id %}">
-                                    {{item.quantity}}</a>
-                                {% endif %}
-
-                        </td>
-                        <td><a href="{% url 'reorder_level' item.id %}">{{item.reorder_level}}</a></td>
-                        <td>{{item.timestamp}}</td>
-                        <td>{{item.last_updated}}</td>
-                        <td><a href="{% url 'delete_items' item.id %}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
-                                    class="bi bi-archive" viewBox="0 0 16 16">
-                                    <path
-                                        d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-                                    Delete
-                                </svg>
-                            </a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div>
+                <a class="btn btn-secondary" href="{% url 'home' %}"><i class="fa fa-arrow-circle-left"
+                        aria-hidden="true">
+                        Back </i></a>
             </div>
+
+            <div class="header">{{title}}</div>
             <br>
 
+            <!--  Start of row -->
+            <div class="row">
+                <!-- Search-Form column-->
+                <div class="col-sm-2">
+                    <form method='POST' action=''>
+                        {% csrf_token %}
+                        {{form |crispy}}
+                        <input class="btn btn-primary" type="submit" value='Search' />
+                    </form>
+                    <br>
+                    <br>
+                    <a href="{% url 'add_items' %}">
+                        <div class="btn btn-info mybutton">Add Items</div>
+                    </a>
+                    <br>
+                    <br>
 
+                    <a href="{% url 'list_history' %}">
+                        <div class="btn btn-info mybutton">List History</div>
+                    </a>
+                    <br>
+                </div>
+                <!--End of Search-Form column-->
 
+                <br>
+                <br>
+                <!-- List of Items column-->
+                <div class="col-sm-10">
+                    <div class="display_table">
+                        <table class='table'>
+                            <thead>
+                                <tr>
+                                    <th>COUNT</th>
+                                    <th>CATEGORY</th>
+                                    <th>ITEM NAME</th>
+                                    <th>QUANTITY IN STORE</th>
+                                    <th>REORDER LEVEL</th>
+                                    <!-- <th>TIMESTAMP</th> -->
+                                    <th>LAST_UPDATED</th>
+                                    <th>DELETE ITEM</th>
+                                </tr>
+                            </thead>
+                            {% for item in items %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{item.category}}</td>
+                                <td><a href="{% url 'update_items' item.id %}">{{item.item_name}}</a></td>
+                                <td>
+                                    {% if item.quantity <= item.reorder_level %} <a
+                                        href="{% url 'item_details' item.id %}">
+                                        <div style="background-color: orange;">{{item.quantity}}</div></a>
+                                        {% else %}
+                                        <a href="{% url 'item_details' item.id %}">
+                                            {{item.quantity}}</a>
+                                        {% endif %}
+
+                                </td>
+                                <td><a href="{% url 'reorder_level' item.id %}">{{item.reorder_level}}</a></td>
+                                <!--<td>{{item.timestamp}}</td> -->
+                                <td>{{item.last_updated}}</td>
+                                <td><a href="{% url 'delete_items' item.id %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
+                                            class="bi bi-archive" viewBox="0 0 16 16">
+                                            <path
+                                                d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                                            Delete
+                                        </svg>
+                                    </a></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <!--End of List of Items column-->
+            </div>
+            <!--End of Row-->
+            <br>
         </div>
+
         <br>
-        <div>
-            <p><a href="{% url 'add_items' %}" class="btn btn-secondary">Add items</a></p>
-        </div>
     </main>
 
 </body>

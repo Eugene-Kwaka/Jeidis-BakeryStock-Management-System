@@ -64,7 +64,7 @@ def home(request):
 
 @login_required
 def list_items(request):
-    title = 'List Items'
+    title = 'ITEMS IN STOCK'
     items = Stock.objects.all()
 
     # SEARCH FUNCTIONALITY USING FILTERS.PY
@@ -77,7 +77,10 @@ def list_items(request):
     if request.method == 'POST':
         category = form['category'].value()
         items = Stock.objects.filter(
-            item_name__icontains=form['item_name'].value()
+            item_name__icontains=form['item_name'].value(),
+            # Filters through dates
+            last_updated__range=[
+                form['start_date'].value(), form['end_date'].value()]
         )
         # If category is not empty
         if (category != ''):

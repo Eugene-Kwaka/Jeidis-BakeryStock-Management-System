@@ -8,7 +8,6 @@
     <main class="container">
 
         <div class="bg-light p-5 rounded">
-
             {% if messages %}
             <div class="alert alert-success" role="alert">
                 {% for message in messages %}
@@ -16,6 +15,12 @@
                 {% endfor %}
             </div>
             {% endif %}
+            <br>
+            <div>
+                <a class="btn btn-secondary" href="{% url 'list_items' %}"><i class="fa fa-arrow-circle-left"
+                        aria-hidden="true">
+                        Back </i></a>
+            </div>
 
             <br><br>
 

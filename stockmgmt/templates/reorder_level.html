@@ -9,14 +9,26 @@
 
     <main class="container">
         <div class="bg-light p-5 rounded">
+            <div>
+                <a class="btn btn-secondary" href="{% url 'list_items' %}"><i class="fa fa-arrow-circle-left"
+                        aria-hidden="true">
+                        Back </i></a>
+            </div>
+            <br>
             <h1>{{ title }} : <strong>{{item.item_name}}</strong></h1>
             <br>
-            <form method='POST' action=''>
-                {% csrf_token %}
-                {{ form | crispy }}
-                <br>
-                <input type="submit" value='Update' />
-            </form>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="display_table">
+                        <form method='POST' action=''>
+                            {% csrf_token %}
+                            {{ form | crispy }}
+                            <br>
+                            <input class="btn btn-primary" type="submit" value='Update' />
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
