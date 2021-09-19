@@ -65,7 +65,7 @@ def home(request):
 @login_required
 def list_items(request):
     title = 'ITEMS IN STOCK'
-    items = Stock.objects.all()
+    items = Stock.objects.all().order_by('-timestamp')
 
     # SEARCH FUNCTIONALITY USING FILTERS.PY
     #my_filter = StockFilter()
@@ -109,7 +109,7 @@ def list_items(request):
 @login_required
 def list_history(request):
     title = 'ITEMS HISTORY'
-    items = StockHistory.objects.all()
+    items = StockHistory.objects.all().order_by('-timestamp')
 
     # ITEM HISTORY SEARCH FORM
     form = StockSearchForm(request.POST or None)
@@ -205,6 +205,24 @@ def delete_items(request, pk):
     }
 
     return render(request, 'delete_items.html', context)
+
+
+@login_required
+def add_category(request):
+    title = 'Add Item Categories'
+    form = CategoryCreationForm(request.POST or None)
+    if request.method == 'POST':
+        form = CategoryCreationForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category added successfully')
+            return redirect('list_items')
+    context = {
+        'form': form,
+        'title': title
+    }
+
+    return render(request, 'add_category.html', context)
 
 
 def item_details(request, pk):

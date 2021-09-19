@@ -1,5 +1,5 @@
 from django import forms
-from .models import Stock
+from .models import *
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -18,6 +18,12 @@ class StockCreationForm(forms.ModelForm):
                 raise forms.ValidationError(
                     str(item_name) + '  already exists')
         return item_name
+
+
+class CategoryCreationForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
 
 
 class CreateUserForm(UserCreationForm):
