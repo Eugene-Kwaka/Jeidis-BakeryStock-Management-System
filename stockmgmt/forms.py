@@ -72,4 +72,4 @@ class StockSearchForm(forms.ModelForm):
 
     class Meta:
         model = Stock
-        fields = ['category', 'item_name', 'start_date', 'end_date']
+        fields = ['item_name', 'start_date', 'end_date']

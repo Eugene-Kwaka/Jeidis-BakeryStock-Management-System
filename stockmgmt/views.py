@@ -55,7 +55,7 @@ def logoutUser(request):
 
 
 def home(request):
-    title = 'JEIDIS STOCK MANAGEMENT SYSTEM'
+    title = 'STOCK MANAGEMENT SYSTEM'
     context = {
         'title': title,
     }
@@ -75,7 +75,7 @@ def list_items(request):
     # SEARCH FUNCTIONALITY
     form = StockSearchForm(request.POST or None)
     if request.method == 'POST':
-        category = form['category'].value()
+        #category = form['category'].value()
         items = Stock.objects.filter(
             item_name__icontains=form['item_name'].value(),
             # Filters through dates
@@ -83,8 +83,8 @@ def list_items(request):
                 form['start_date'].value(), form['end_date'].value()]
         )
         # If category is not empty
-        if (category != ''):
-            items = items.filter(category_id=category)
+        # if (category != ''):
+        #     items = items.filter(category_id=category)
 
     # EXPORT TO CSV
     if form['export_to_CSV'].value() == True:
@@ -114,13 +114,13 @@ def list_history(request):
     # ITEM HISTORY SEARCH FORM
     form = StockSearchForm(request.POST or None)
     if request.method == 'POST':
-        category = form['category'].value()
+        #category = form['category'].value()
         items = StockHistory.objects.filter(
             item_name__icontains=form['item_name'].value()
         )
         # If category is not empty and one of the categories has been selected
-        if (category != ''):
-            items = items.filter(category_id=category)
+        # if (category != ''):
+        #     items = items.filter(category_id=category)
 
         # EXPORT TO CSV
         if form['export_to_CSV'].value() == True:

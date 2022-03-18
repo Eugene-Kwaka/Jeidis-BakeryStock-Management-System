@@ -5,6 +5,11 @@ body {
   background-position: 50% 50%;
 }
 
+/* .home-row{
+  display: grid;
+  grid-template-columns:1fr 3fr;
+  grid-gap:20px;
+} */
 
 /*Align the title to the center of the page*/
 .table{
@@ -17,7 +22,7 @@ body {
 
 
 .mybutton{
-	width: 100%;
+	/* width:auto; */
   }
 
 /*Make alternating colors for the table rows*/

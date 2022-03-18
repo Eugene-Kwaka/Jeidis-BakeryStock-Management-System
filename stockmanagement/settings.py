@@ -118,7 +118,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# Change timezone to where I am currently
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
