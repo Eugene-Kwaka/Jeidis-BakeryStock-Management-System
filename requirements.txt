@@ -1,9 +1,10 @@
-asgiref==3.4.1
+asgiref @ file:///tmp/build/80754af9/asgiref_1625643473416/work
 astroid==2.2.5
 autopep8==1.5
+backports.zoneinfo==0.2.1
 certifi==2021.5.30
 colorama==0.4.1
-Django==4.0
+Django @ file:///tmp/build/80754af9/django_1617740316746/work
 django-crispy-forms==1.12.0
 django-filter==2.4.0
 django-registration-redux==2.9
@@ -16,8 +17,10 @@ pycodestyle==2.5.0
 pylint==2.3.1
 python-decouple==3.5
 pytz==2021.3
+six==1.16.0
 sqlparse==0.4.2
 typed-ast==1.4.0
-typing-extensions==4.0.0
+typing_extensions==4.0.0
+tzdata==2021.5
 wincertstore==0.2
 wrapt==1.11.2
