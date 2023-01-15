@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+import datetime
 
 # Create your models here.
 
@@ -29,7 +30,7 @@ class Stock(models.Model):
     phone_number = models.CharField(max_length=50, blank=True, null=True)
     created_by = models.CharField(max_length=50, blank=True, null=True)
     reorder_level = models.IntegerField(default='0', blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True, default=datetime.date.today)
     last_updated = models.DateTimeField(auto_now=True, null=True)
     export_to_CSV = models.BooleanField(default=False)
 

@@ -1,5 +1,7 @@
 .env
 excess.txt
+stockmanagementsystem/
+db.sqlite3
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,intellij,pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,intellij,pycharm
 
